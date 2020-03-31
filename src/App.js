@@ -1,5 +1,5 @@
 //TODO: STEP 1 - Import the useState hook.
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./App.css";
 import BottomRow from "./BottomRow";
 import ButtonGroup from "./ButtonGroup";
@@ -9,6 +9,7 @@ function App() {
     const [homeScore, setHomeScore] = useState(0);
     const [awayScore, setAwayScore] = useState(0);
     const [currentQuarter, setCurQuarter] = useState(1);
+    const [timeLeft, setTimeLeft] = useState(900);//this is going to be a seconds rep of time left in the quarter, it'll make iteration easier
     //todo: difference between "const setTeamScore = team, score =>" and "function setTeamScore(team, score)"
     function setTeamScore(team, score){
         if(team === "home"){
@@ -23,6 +24,18 @@ function App() {
         console.log(currentQuarter);
     }
 
+
+    useEffect(() => {
+        //part of this pattern I found at:
+        //https://stackoverflow.com/questions/57137094/implementing-a-countdown-timer-in-react-with-hooks
+        const intervalId = setInterval(()=>{
+            setTimeLeft(timeLeft - 1);
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+
+    }, [timeLeft]);
+
     return (
         <div className="container">
             <section className="scoreboard">
@@ -35,7 +48,7 @@ function App() {
 
                         <div className="home__score">{homeScore}</div>
                     </div>
-                    <div className="timer">00:03</div>
+                    <div className="timer">{Math.floor(timeLeft / 60)}:{(timeLeft % 60) < 10 ? "0" + (timeLeft % 60) : timeLeft % 60}</div>
                     <div className="away">
                         <h2 className="away__name">Tigers</h2>
                         <div className="away__score">{awayScore}</div>

@@ -32,7 +32,7 @@ function App() {
             setTimeLeft(timeLeft - 1);
         }, 1000);
 
-        return () => clearInterval(intervalId);
+        return () => clearInterval(intervalId);//the clear interval is important to keep the time displaying properly
 
     }, [timeLeft]);
 

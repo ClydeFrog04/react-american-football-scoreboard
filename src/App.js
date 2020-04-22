@@ -19,9 +19,7 @@ function App() {
         }
     }
     function incrementQuarter(){
-        let newQuarter = ((currentQuarter % 4) + 1);
-        setCurQuarter(newQuarter);
-        console.log(currentQuarter);
+        setCurQuarter((currentQuarter % 4) + 1);
     }
 
 
@@ -32,6 +30,15 @@ function App() {
             setTimeLeft(timeLeft - 1);
         }, 1000);
 
+        if(timeLeft<=0) {
+            clearInterval(intervalId);
+
+            //todo: is there a better way to do this? I'm sure there must be a react way to do this :]
+            const timerDiv = document.querySelector(".timer");
+            timerDiv.style.color = "red";
+
+            return;
+        }
         return () => clearInterval(intervalId);//the clear interval is important to keep the time displaying properly
 
     }, [timeLeft]);
@@ -44,8 +51,6 @@ function App() {
                         <h2 className="home__name">Lions</h2>
 
                         {/* TODO STEP 3 - We need to change the hardcoded values in these divs to accept dynamic values from our state. */}
-
-
                         <div className="home__score">{homeScore}</div>
                     </div>
                     <div className="timer">{Math.floor(timeLeft / 60)}:{(timeLeft % 60) < 10 ? "0" + (timeLeft % 60) : timeLeft % 60}</div>
